@@ -15,6 +15,7 @@ import { Sparkles } from 'lucide-react';
 export default function CustomerPage() {
   const [menus, setMenus] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [menuError, setMenuError] = useState<string | null>(null);
   const [activeOrder, setActiveOrder] = useState<Order | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -26,8 +27,10 @@ export default function CustomerPage() {
       setLoading(true);
       const data = await fetchMenus();
       setMenus(data);
+      setMenuError(null);
     } catch (e) {
       console.error('Failed to load menus', e);
+      setMenuError('메뉴를 불러오지 못했습니다. 서버 연결을 확인해 주세요.');
     } finally {
       setLoading(false);
     }
@@ -126,7 +129,20 @@ export default function CustomerPage() {
         </div>
       ) : (
         <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_20rem]">
-          <div>{loading ? <MenuGridSkeleton /> : <MenuGrid menus={menus} onAddToCart={cart.addItem} />}</div>
+          <div>
+            {menuError ? (
+              <div className="rounded-[var(--radius-lg)] border border-[var(--danger)] bg-[var(--danger-soft)] p-6 text-center text-sm text-[var(--danger)]">
+                {menuError}
+                <button onClick={loadMenus} className="ml-2 underline underline-offset-2">
+                  다시 시도
+                </button>
+              </div>
+            ) : loading ? (
+              <MenuGridSkeleton />
+            ) : (
+              <MenuGrid menus={menus} onAddToCart={cart.addItem} />
+            )}
+          </div>
 
           <div className="lg:sticky lg:top-20">
             <CartDrawer

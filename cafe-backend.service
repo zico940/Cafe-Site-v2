@@ -1,0 +1,23 @@
+[Unit]
+Description=Cafe Site v2 Backend API (FastAPI)
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=arduino
+WorkingDirectory=/home/arduino/cafe-site-v2/backend
+Environment="PATH=/home/arduino/cafe-site-v2/backend/venv/bin"
+Environment="DATABASE_URL=postgresql://postgres:postgres@localhost:5432/aura_cafe"
+Environment="FRONTEND_URL=http://100.80.214.126:3000"
+EnvironmentFile=/home/arduino/cafe-site-v2/backend/.env.production
+
+ExecStart=/home/arduino/cafe-site-v2/backend/venv/bin/python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

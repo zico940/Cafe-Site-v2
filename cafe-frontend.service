@@ -1,0 +1,20 @@
+[Unit]
+Description=Cafe Site v2 Frontend (Next.js)
+After=network.target
+
+[Service]
+Type=simple
+User=arduino
+WorkingDirectory=/home/arduino/cafe-site-v2/frontend
+Environment="PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/home/arduino/.npm"
+Environment="NODE_ENV=production"
+
+ExecStart=/usr/bin/npm run start
+
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

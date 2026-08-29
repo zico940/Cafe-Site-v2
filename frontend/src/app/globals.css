@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+/* ── Design tokens ───────────────────────────────────────────────
+   Surfaces step up (bg → raised → overlay), never sideways.
+   Text steps down (primary → secondary → muted).
+   Accents are per-role: amber = customer, blue = owner, violet = dev. */
+:root {
+  --bg: #0c0a09;
+  --surface: #16130f;
+  --surface-raised: #1e1a15;
+  --surface-overlay: #262019;
+  --border: #2a241d;
+  --border-strong: #3a3128;
+
+  --text: #f5f1ec;
+  --text-secondary: #b3a99e;
+  --text-muted: #7d736a;
+
+  --accent: #f0a532;
+  --accent-hover: #f7b955;
+  --accent-ink: #1a1206;
+  --accent-soft: rgb(240 165 50 / 0.12);
+  --accent-line: rgb(240 165 50 / 0.28);
+
+  --info: #5aa9f5;
+  --info-soft: rgb(90 169 245 / 0.12);
+  --info-line: rgb(90 169 245 / 0.28);
+
+  --ok: #45c98a;
+  --ok-soft: rgb(69 201 138 / 0.12);
+  --ok-line: rgb(69 201 138 / 0.28);
+
+  --warn: #f0a532;
+  --danger: #f4776b;
+  --danger-soft: rgb(244 119 107 / 0.12);
+  --danger-line: rgb(244 119 107 / 0.3);
+
+  --violet: #b18cf5;
+  --violet-soft: rgb(177 140 245 / 0.12);
+  --violet-line: rgb(177 140 245 / 0.28);
+
+  /* One shadow scale — ambient + key light, not a blurry amber haze */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.3);
+  --shadow-md: 0 2px 4px rgb(0 0 0 / 0.25), 0 6px 16px -6px rgb(0 0 0 / 0.4);
+  --shadow-lg: 0 4px 8px rgb(0 0 0 / 0.25), 0 16px 40px -12px rgb(0 0 0 / 0.55);
+
+  --radius: 14px;
+  --radius-lg: 20px;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-raised: var(--surface-raised);
+  --color-overlay: var(--surface-overlay);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-ink: var(--text);
+  --color-ink-2: var(--text-secondary);
+  --color-ink-3: var(--text-muted);
+  --color-accent: var(--accent);
+  --color-info: var(--info);
+  --color-ok: var(--ok);
+  --color-danger: var(--danger);
+  --color-violet: var(--violet);
+  --radius-card: var(--radius);
+  --radius-card-lg: var(--radius-lg);
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  /* Tabular figures: prices and timers stop jittering as digits change */
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Korean text wraps mid-word by default; keep it on word boundaries */
+:lang(ko) {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* Visible focus for keyboard users only — accessibility floor, not decoration */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-strong) transparent;
+  }
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Respect the OS reduced-motion setting: this UI leans on animation heavily,
+   and vestibular-sensitive users need an off switch. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

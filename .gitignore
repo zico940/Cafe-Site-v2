@@ -20,6 +20,11 @@ backend/.pytest_cache
 backend/.coverage
 backend/htmlcov
 
+# Claude Code local state
+.claude/scheduled_tasks.lock
+frontend/.claude
+backend/.claude
+
 # IDE
 .vscode
 .idea

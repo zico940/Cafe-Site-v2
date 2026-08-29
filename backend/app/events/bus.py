@@ -1,6 +1,9 @@
+import logging
 import time
 from typing import Any, Dict
 from app.websocket.manager import manager
+
+logger = logging.getLogger(__name__)
 
 EVENT_CHANNELS = {
     "order.created":   ["owner", "dev"],
@@ -34,6 +37,8 @@ async def dispatch_event(event_type: str, payload: Dict[str, Any], db=None):
             )
             db.add(log)
             db.commit()
-        except Exception as e:
-            print(f"Failed to log event: {e}")
+        except Exception:
+            # Logging must never break event delivery, but a swallowed
+            # traceback once hid a schema mismatch for the whole log table.
+            logger.exception("Failed to persist event log: %s", event_type)
             db.rollback()

@@ -29,6 +29,14 @@ def get_orders(status: Optional[str] = None, db: Session = Depends(get_db)):
     return query.order_by(Order.created_at.desc()).all()
 
 
+@router.get("/{order_id}", response_model=OrderResponse)
+def get_order(order_id: int, db: Session = Depends(get_db)):
+    db_order = db.query(Order).filter(Order.id == order_id).first()
+    if not db_order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    return db_order
+
+
 @router.post("", response_model=OrderResponse)
 async def create_order(order: OrderCreate, db: Session = Depends(get_db)):
     try:
